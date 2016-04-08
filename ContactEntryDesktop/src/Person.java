@@ -5,11 +5,10 @@ public class Person {
 	String name;
 	String location;
 	String comments;
-	String phone_number;
+	String phoneNumber;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 	}
-
 }
