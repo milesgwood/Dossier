@@ -12,9 +12,4 @@ public class BackgroundAtt extends Attribute{
 	public String getInfo() {
 		return this.info;
 	}
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}}
+}

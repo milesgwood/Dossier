@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public abstract class Attribute {
 	private static int attCount = 0;
 	private String attName;
@@ -23,5 +25,18 @@ public abstract class Attribute {
 		return this.elementID;
 	}
 	
-	public abstract String toString();
+	public String toString()
+	{
+		return(this.getID() + ":" + this.getName() + "\n\t" + this.getInfo() + "\n");
+	}
+	
+	public static ArrayList<String> allNames(ArrayList<Attribute> attributes)
+	{
+		ArrayList<String> names = new ArrayList<String>();
+		for(Attribute att: attributes)
+		{
+			names.add(att.getName());
+		}
+		return names;
+	}
 }

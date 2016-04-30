@@ -11,12 +11,23 @@ public class AttributeList extends Attribute{
 	}
 	@Override
 	public String getInfo() {
-		return this.list.toString();
+		String info = new String();
+		for(String s: list)
+		{
+			info +=s + "\n\t";
+		}
+		return info;
 	}
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public static boolean isNameTaken(ArrayList<Attribute> attributes, String name)
+	{
+		for(Attribute att: attributes)
+		{
+			if(att.getName().equals(name))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
-
 }
