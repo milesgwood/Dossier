@@ -22,17 +22,25 @@ public class ParserTest {
 			if (links == null) {
 				links = new Elements();
 				temp = doc.select("a[href]");
-				// System.out.println(temp.size());
 				for (Element link : temp) {
 					if (link.parent().parent().parent().className().equals("nav")) {
 						links.add(link);
-						// System.out.println(links.size());
 					}
 				}
 				assertEquals(links.size(), 14);
+				printLinks();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void printLinks() throws IOException {
+		String relHref;
+		for(Element e : links)
+		{
+			relHref = e.attr("href");
+			//System.out.println(relHref);
 		}
 	}
 
@@ -42,23 +50,70 @@ public class ParserTest {
 		assertEquals(links.size(), 14);
 		Elements items = doc.getElementsByTag(Parser.listItemTag);
 		assertEquals(32, items.size());
-		items = Parser.removeLinks(items);
-		assertEquals(17, items.size());
-		// int i = 0;
-		// for (Element item : items) {
-		// System.out.println(i++ + " " + item.text());
-		// }
+		Elements less = Parser.removeLinks(items);
+		assertEquals(17, less.size());
+	}
+
+	@Test
+	public void testParseOrder() throws IOException {
+		String path = "/home/vice6/Downloads/FBMiles/html/contact_info.htm";
+		File input = new File(path);
+		doc = Jsoup.parse(input, "UTF-8");
+		Elements longWay = doc.select("div.contents > div > table > tbody > tr > td > ul > li");
+		Elements contents = doc.select("div.contents");
+		contents = contents.select("div > table > tbody > tr > td > ul > li");
+		assertEquals(contents.size(), longWay.size());
+		//System.out.println("longWay");
+		for (Element e : longWay) {
+			//System.out.println(e.toString() + "\n");
+		}
+
+	}
+
+	@Test
+	public void testDirectListParse() throws IOException {
+		Parser.clearAttribute();
+		String path = "/home/vice6/Downloads/FBMiles/html/contact_info.htm";
+		File input = new File(path);
+		doc = Jsoup.parse(input, "UTF-8");
+		Parser.parseContentBodyLists(doc);
+		for(Attribute a: Parser.attributes)
+		{
+			//System.out.println(a.toString());
+		}
+		assertEquals(Parser.attributes.size(), 3);
+	}
+	
+	@Test
+	public void testMetaSpanParse() throws IOException {
+		Parser.clearAttribute();
+		String path = "/home/vice6/Downloads/FBMiles/html/contact_info.htm";
+		File input = new File(path);
+		doc = Jsoup.parse(input, "UTF-8");
+		Parser.parseMetaLists(doc);
+		for(Attribute a: Parser.attributes)
+		{
+			//System.out.println(a.toString());
+		}
+		assertEquals(Parser.attributes.size(), 1);
 	}
 
 	@Test
 	public void testParser() throws IOException {
+		Parser.clearAttribute();
 		ArrayList<Attribute> attributes = Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
 		ArrayList<String> names = Attribute.allNames(attributes);
-		assertEquals(names.size(), 25);
+		//System.out.println(names.toString());
+		assertEquals(names.size(), 27);
 		assertTrue(names.contains("Pages You Admin"));
 		assertTrue(names.contains("Hometown"));
 		assertTrue(names.contains("Apps"));
 		assertTrue(names.contains("Groups"));
+	}
+	
+	@Test
+	public void truncateTest() throws IOException {
+		assertEquals("Phone", Attribute.truncate("Phones"));
 	}
 
 	@Test
@@ -84,6 +139,28 @@ public class ParserTest {
 			// System.out.println(i++ + " " + item.toString());
 		}
 		assertEquals(listItems.size(), 15);
-
+	}
+	
+	@Test
+	public void testFriends() throws IOException {
+		Parser.clearAttribute();
+		String path = new String("/home/vice6/Downloads/FBMiles/html/friends.htm");
+		File input = new File(path);
+		Document doc = Jsoup.parse(input, "UTF-8");
+		Parser.parseFriends(doc);
+		assertEquals(Parser.attributes.size(), 1);
+		System.out.println(Parser.attributes.get(0).toString());
+	}
+	@Test
+	public void printFriends() throws IOException {
+		Parser.clearAttribute();
+		String path = new String("/home/vice6/Downloads/FBMiles/html/friends.htm");
+		File input = new File(path);
+		Document doc = Jsoup.parse(input, "UTF-8");
+		Parser.parseFriends(doc);
+		for(Contact c : Parser.contacts)
+		{
+			c.fullName();
+		}
 	}
 }
