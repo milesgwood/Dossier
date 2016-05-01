@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,9 +17,11 @@ public class Parser {
 	static String messages = "/html/messages.htm";
 	static String contact = "/html/contact_info.htm";
 	static String home = null;
-	static ArrayList<Attribute> attributes = new ArrayList<Attribute>();
-	static ArrayList<Contact> contacts = new ArrayList<Contact>();
 	private static Elements links = null;
+	
+	static ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+	static HashSet<Contact> contacts = new HashSet<Contact>();
+	static ArrayList<Message> messageList = new ArrayList<Message>();
 
 	public static void clearAttribute() {
 		attributes = new ArrayList<Attribute>();
@@ -64,49 +67,79 @@ public class Parser {
 	public static void parseFriends(Document doc) {
 		ArrayList<String> friends = new ArrayList<String>();
 		Elements friendsList = doc.select("div.contents > div > ul > li");
-		for(Element e: friendsList)
-		{
+		for (Element e : friendsList) {
 			friends.add(e.text());
 			parseContacts(e.text());
-			//TO DO MAKE A CONTACT CREATION MEHTOD
 		}
 		attributes.add(new Attribute("Friend", friends));
-		for(Contact c: contacts)
-		{
+		/**for (Contact c : contacts) {
 			c.printContact();
-		}
+		}**/
 	}
 
 	public static void parseMessages(Document doc) {
+
+		int pID;
+		String name;
+		String date;
+		String message;
+		int threadId = 0;
 		
+		Elements users = doc.select("div.message_header > span.user");
+		Element oldThread = users.first().parent();
+		Element newThread;
+		
+		for (Element e : users) {
+			if (!e.text().endsWith(".com")) {
+				name = e.text();
+				date = e.nextElementSibling().text();
+				pID = getpID(name);
+				if(name.equals("Miles Greatwood"))
+				{
+					pID = 0;
+				}
+				message = e.parent().parent().nextElementSibling().text();
+				newThread = e.parent().parent().parent();
+				if(!newThread.equals(oldThread))
+				{
+					threadId++;
+					oldThread = newThread;
+				}
+				messageList.add(new Message(pID, name,  date, message, threadId));
+			}
+		}
 	}
+	public static int getpID(String name)
+	{
+		for(Contact c :contacts)
+		{
+			if(c.fullName().equals(name))
+			{
+				return c.getpID();
+			}
+		}
+		Contact newC = new Contact(name.split(" "));
+		return newC.getpID();
+	}
+
 	private static void parseContacts(String name) {
 		boolean hasEmail = name.endsWith(")");
 		String[] info = name.split(" ");
 		Contact newContact;
-		if(hasEmail)
-		{
-			if(info.length > 3)
-			{
+		if (hasEmail) {
+			if (info.length > 3) {
 				newContact = new Contact(info[0], info[1], info[2]);
-				newContact.setEmail(info[3].substring(1, info[3].length()-1));
+				newContact.setEmail(info[3].substring(1, info[3].length() - 1));
 				contacts.add(newContact);
-			}
-			else
-			{
+			} else {
 				newContact = new Contact(info[0], info[1]);
-				newContact.setEmail(info[2].substring(1, info[2].length()-1));
+				newContact.setEmail(info[2].substring(1, info[2].length() - 1));
 				contacts.add(newContact);
 			}
-		}
-		else
-		{
-			if(info.length > 2)
-			{
+		} else {
+			if (info.length > 2) {
 				contacts.add(new Contact(info[0], info[1], info[2]));
-			}
-			else
-			{
+			} else {
 				contacts.add(new Contact(info[0], info[1]));
 			}
 		}

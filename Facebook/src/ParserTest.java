@@ -34,13 +34,12 @@ public class ParserTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void printLinks() throws IOException {
 		String relHref;
-		for(Element e : links)
-		{
+		for (Element e : links) {
 			relHref = e.attr("href");
-			//System.out.println(relHref);
+			// System.out.println(relHref);
 		}
 	}
 
@@ -63,9 +62,9 @@ public class ParserTest {
 		Elements contents = doc.select("div.contents");
 		contents = contents.select("div > table > tbody > tr > td > ul > li");
 		assertEquals(contents.size(), longWay.size());
-		//System.out.println("longWay");
+		// System.out.println("longWay");
 		for (Element e : longWay) {
-			//System.out.println(e.toString() + "\n");
+			// System.out.println(e.toString() + "\n");
 		}
 
 	}
@@ -77,13 +76,12 @@ public class ParserTest {
 		File input = new File(path);
 		doc = Jsoup.parse(input, "UTF-8");
 		Parser.parseContentBodyLists(doc);
-		for(Attribute a: Parser.attributes)
-		{
-			//System.out.println(a.toString());
+		for (Attribute a : Parser.attributes) {
+			// System.out.println(a.toString());
 		}
 		assertEquals(Parser.attributes.size(), 3);
 	}
-	
+
 	@Test
 	public void testMetaSpanParse() throws IOException {
 		Parser.clearAttribute();
@@ -91,9 +89,8 @@ public class ParserTest {
 		File input = new File(path);
 		doc = Jsoup.parse(input, "UTF-8");
 		Parser.parseMetaLists(doc);
-		for(Attribute a: Parser.attributes)
-		{
-			//System.out.println(a.toString());
+		for (Attribute a : Parser.attributes) {
+			// System.out.println(a.toString());
 		}
 		assertEquals(Parser.attributes.size(), 1);
 	}
@@ -103,14 +100,14 @@ public class ParserTest {
 		Parser.clearAttribute();
 		ArrayList<Attribute> attributes = Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
 		ArrayList<String> names = Attribute.allNames(attributes);
-		//System.out.println(names.toString());
+		// System.out.println(names.toString());
 		assertEquals(names.size(), 27);
 		assertTrue(names.contains("Pages You Admin"));
 		assertTrue(names.contains("Hometown"));
 		assertTrue(names.contains("Apps"));
 		assertTrue(names.contains("Groups"));
 	}
-	
+
 	@Test
 	public void truncateTest() throws IOException {
 		assertEquals("Phone", Attribute.truncate("Phones"));
@@ -140,7 +137,7 @@ public class ParserTest {
 		}
 		assertEquals(listItems.size(), 15);
 	}
-	
+
 	@Test
 	public void testFriends() throws IOException {
 		Parser.clearAttribute();
@@ -149,8 +146,9 @@ public class ParserTest {
 		Document doc = Jsoup.parse(input, "UTF-8");
 		Parser.parseFriends(doc);
 		assertEquals(Parser.attributes.size(), 1);
-		System.out.println(Parser.attributes.get(0).toString());
+		//System.out.println(Parser.attributes.get(0).toString());
 	}
+
 	@Test
 	public void printFriends() throws IOException {
 		Parser.clearAttribute();
@@ -158,9 +156,24 @@ public class ParserTest {
 		File input = new File(path);
 		Document doc = Jsoup.parse(input, "UTF-8");
 		Parser.parseFriends(doc);
-		for(Contact c : Parser.contacts)
-		{
+		for (Contact c : Parser.contacts) {
 			c.fullName();
 		}
+	}
+
+	@Test
+	public void parseMessages() throws IOException {
+		Parser.clearAttribute();
+		String path = new String("/home/vice6/Downloads/FBMiles/html/messages.htm");
+		File input = new File(path);
+		Document doc = Jsoup.parse(input, "UTF-8");
+		Parser.parseMessages(doc);
+		Message m = Parser.messageList.get(0);
+		//System.out.println(m.toString());
+		assertEquals(m.messageSenderName(), "Michael Chen");
+		Message n = Parser.messageList.get(7);
+		System.out.println(n.toString());
+		assertEquals(n.messageSenderName(), "Megan Morris");
+		assertEquals(m.getThreadID(), n.getThreadID());
 	}
 }
