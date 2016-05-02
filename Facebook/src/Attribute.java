@@ -64,14 +64,14 @@ public class Attribute {
 		}
 	}
 
-	public static boolean isNameTaken(ArrayList<Attribute> attributes, String name) {
-		name = truncate(name);
+	public static String isNameTaken(ArrayList<Attribute> attributes, String name) {
+		String trunc = truncate(name);
 		for (Attribute att : attributes) {
 			if (att.getName().equals(name)) {
-				return true;
+				return "BADNAME";
 			}
 		}
-		return false;
+		return trunc;
 	}
 
 	public static String truncate(String extra) {

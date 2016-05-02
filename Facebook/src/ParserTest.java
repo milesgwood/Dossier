@@ -104,8 +104,8 @@ public class ParserTest {
 		assertEquals(names.size(), 27);
 		assertTrue(names.contains("Pages You Admin"));
 		assertTrue(names.contains("Hometown"));
-		assertTrue(names.contains("Apps"));
-		assertTrue(names.contains("Groups"));
+		assertTrue(names.contains("App"));
+		assertTrue(names.contains("Group"));
 	}
 
 	@Test
@@ -147,6 +147,14 @@ public class ParserTest {
 		Parser.parseFriends(doc);
 		assertEquals(Parser.attributes.size(), 1);
 		//System.out.println(Parser.attributes.get(0).toString());
+	}
+	
+	@Test
+	public void testMyPid() throws IOException {
+		Parser.clearAttribute();
+		Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
+		assertEquals(Parser.getContactName(0), "Miles Greatwood");
+		assertEquals(Parser.getpID("Miles Greatwood"), 0);
 	}
 
 	@Test

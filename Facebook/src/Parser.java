@@ -18,122 +18,119 @@ public class Parser {
 	static String contact = "/html/contact_info.htm";
 	static String home = null;
 	private static Elements links = null;
-	
+
 	static ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 	static HashSet<Contact> contacts = new HashSet<Contact>();
 	static ArrayList<Message> messageList = new ArrayList<Message>();
 	static ArrayList<String> friendsAList = new ArrayList<String>();
+	static HashSet<String> myNames = new HashSet<String>();
+	static String mainName;
 
-	public static void clearAttribute() {
-		attributes = new ArrayList<Attribute>();
-		Attribute.resetCount();
-	}
-	
-	public static String getContactName(int pID)
-	{
-		for(Contact c: contacts)
-		{
-			if(c.getpID() == pID)
-			{
+	public static String getContactName(int pID) {
+		for (Contact c : contacts) {
+			if (c.getpID() == pID) {
 				return c.fullName();
 			}
 		}
 		return "NO NAME";
 	}
 	
-	// This class gets passed the index.htm file and finds the rest of the
-	// needed files
-	public static ArrayList<Attribute> parseMain(String path) throws IOException {
-		File input = new File(path);
-		Document doc = Jsoup.parse(input, "UTF-8");
-		Elements names = doc.getElementsByTag(headerTag);
+	public static Contact getContact(int pID) {
+		for (Contact c : contacts) {
+			if (c.getpID() == pID) {
+				return c;
+			}
+		}
+		return null;
+	}
 
-		if (home == null) {
-			home = path.substring(0, path.lastIndexOf('/') + 1);
+	public static int getpID(String name) {
+		for (Contact c : contacts) {
+			if (c.fullName().equals(name)) {
+				return c.getpID();
+			}
 		}
-		if (links == null) {
-			links = doc.select("div.nav > ul > li > a[href]");
+		String[] splitNames = name.split("\\s+");
+		Contact newC = new Contact(splitNames);
+		newC.printContact();
+		return newC.getpID();
+	}
+	
+	public static Contact getContact(String name) {
+		for (Contact c : contacts) {
+			if (c.fullName().equals(name)) {
+				return c;
+			}
 		}
-		parseContentBodyLists(doc);
-		parseSingleTextFields(names); // divs and data
-		// System.out.println(Attribute.allNames(attributes).toString());
-		input = new File(home + friends);
-		doc = Jsoup.parse(input, "UTF-8");
-		parseFriends(doc);
-		input = new File(home + messages);
-		doc = Jsoup.parse(input, "UTF-8");
-		parseMessages(doc);
-		return attributes;
+		String[] splitNames = name.split("\\s+");
+		Contact newC = new Contact(splitNames);
+		//System.out.println(newC.fullName());
+		return newC;
+	}
+
+	private static void setMyOtherNames() {
+		for (Attribute a : attributes) {
+			if (a.getName().equals("Previous Name")) {
+				for (String name : a.getInfo()) {
+					Parser.myNames.add(name);
+					for (String s : name.split(" - ")) {
+						myNames.add(s);
+					}
+				}
+				return;
+			}
+		}
 	}
 
 	public static Elements removeLinks(Elements set) {
 		Elements less = new Elements();
 		for (Element e : set) {
 			if (!e.parent().parent().className().equals("nav")) {
-				// System.out.println("adding " + e.text());
 				less.add(e);
 			}
 		}
 		return less;
 	}
 
-	public static void parseFriends(Document doc) {
-		Elements friendsList = doc.select("div.contents > div > ul > li");
-		for (Element e : friendsList) {
-			friendsAList.add(e.text());
-			parseContacts(e.text());
-		}
-		attributes.add(new Attribute("Friend", friendsAList));
+	public static void clearAttribute() {
+		attributes = new ArrayList<Attribute>();
+		Attribute.resetCount();
 	}
 
-	public static void parseMessages(Document doc) {
-
-		int pID;
-		String name;
-		String date;
-		String message;
-		int threadId = 0;
-		
-		Elements users = doc.select("div.message_header > span.user");
-		Element oldThread = users.first().parent();
-		Element newThread;
-		
-		for (Element e : users) {
-			if (!e.text().endsWith(".com")) {
-				name = e.text();
-				date = e.nextElementSibling().text();
-				pID = getpID(name);
-				if(name.equals("Miles Greatwood"))
-				{
-					pID = 0;
-				}
-				message = e.parent().parent().nextElementSibling().text();
-				newThread = e.parent().parent().parent();
-				if(!newThread.equals(oldThread))
-				{
-					threadId++;
-					oldThread = newThread;
-				}
-				messageList.add(new Message(pID, name,  date, message, threadId));
-			}
+	// This class gets passed the index.htm file and finds the rest of the
+	// needed files
+	public static ArrayList<Attribute> parseMain(String path) throws IOException {
+		File input = new File(path);
+		Document doc = Jsoup.parse(input, "UTF-8");
+		Elements names = doc.getElementsByTag(headerTag);
+	
+		if (home == null) {
+			home = path.substring(0, path.lastIndexOf('/') + 1);
 		}
-	}
-	public static int getpID(String name)
-	{
-		for(Contact c :contacts)
-		{
-			if(c.fullName().equals(name))
-			{
-				return c.getpID();
-			}
+		if (links == null) {
+			links = doc.select("div.nav > ul > li > a[href]");
 		}
-		Contact newC = new Contact(name.split(" "));
-		return newC.getpID();
+		//This portion finds who the owner of the facebook file is
+		mainName = doc.select("div.contents > h1").first().text();
+		myNames.add(mainName);
+		contacts.add(new Contact(mainName.split("\\s+"), 0));
+		
+		//Parse the body
+		parseContentBodyLists(doc);
+		parseSingleTextFields(names);
+		input = new File(home + friends);
+		doc = Jsoup.parse(input, "UTF-8");
+		parseFriends(doc);
+		setMyOtherNames();
+		input = new File(home + messages);
+		doc = Jsoup.parse(input, "UTF-8");
+		parseMessages(doc);
+		return attributes;
 	}
 
 	private static void parseContacts(String name) {
 		boolean hasEmail = name.endsWith(")");
-		String[] info = name.split(" ");
+		String[] info = name.split("\\s+");
 		Contact newContact;
 		if (hasEmail) {
 			if (info.length > 3) {
@@ -169,7 +166,8 @@ public class Parser {
 			grandparentTr = e.parent().parent();
 			newName = grandparentTr.firstElementSibling().text();
 			if (!newName.equals(name) && dataList.size() > 0 || e.equals(listItems.last())) {
-				if (!Attribute.isNameTaken(attributes, name)) {
+				name = Attribute.isNameTaken(attributes, name);
+				if (!name.equals("BADNAME")) {
 					attributes.add(new Attribute(name, dataList));
 				}
 				dataList = new ArrayList<String>();
@@ -177,9 +175,19 @@ public class Parser {
 			name = new String(newName);
 			dataList.add(new String(e.text()));
 		}
-		if (!Attribute.isNameTaken(attributes, name) && !dataList.isEmpty()) {
+		name = Attribute.isNameTaken(attributes, name);
+		if (!name.equals("BADNAME") && !dataList.isEmpty()) {
 			attributes.add(new Attribute(name, dataList));
 		}
+	}
+
+	public static void parseFriends(Document doc) {
+		Elements friendsList = doc.select("div.contents > div > ul > li");
+		for (Element e : friendsList) {
+			friendsAList.add(e.text());
+			parseContacts(e.text());
+		}
+		attributes.add(new Attribute("Friend", friendsAList));
 	}
 
 	// Format is "div.contents > div > table > tbody > tr > td >span.meta > ul >
@@ -198,7 +206,8 @@ public class Parser {
 			greatGrandparentTr = e.parent().parent().parent();
 			newName = greatGrandparentTr.firstElementSibling().text();
 			if (!newName.equals(name) && dataList.size() > 0 || e.equals(listItems.last())) {
-				if (!Attribute.isNameTaken(attributes, name)) {
+				name = Attribute.isNameTaken(attributes, name);
+				if (!name.equals("BADNAME")) {
 					attributes.add(new Attribute(name, dataList));
 				}
 				dataList = new ArrayList<String>();
@@ -206,8 +215,39 @@ public class Parser {
 			name = new String(newName);
 			dataList.add(new String(e.text()));
 		}
-		if (!Attribute.isNameTaken(attributes, name) && !dataList.isEmpty()) {
+		name = Attribute.isNameTaken(attributes, name);
+		if (!name.equals("BADNAME") && !dataList.isEmpty()) {
 			attributes.add(new Attribute(name, dataList));
+		}
+	}
+
+	public static void parseMessages(Document doc) {
+		int pID;
+		String name;
+		String date;
+		String message;
+		int threadId = 0;
+	
+		Elements users = doc.select("div.message_header > span.user");
+		Element oldThread = users.first().parent();
+		Element newThread;
+	
+		for (Element e : users) {
+			if (!e.text().endsWith(".com")) {
+				name = e.text();
+				date = e.nextElementSibling().text();
+				pID = getpID(name);
+				if (myNames.contains(name)) {
+					pID = 0;
+				}
+				message = e.parent().parent().nextElementSibling().text();
+				newThread = e.parent().parent().parent();
+				if (!newThread.equals(oldThread)) {
+					threadId++;
+					oldThread = newThread;
+				}
+				messageList.add(new Message(pID, name, date, message, threadId));
+			}
 		}
 	}
 
@@ -239,17 +279,10 @@ public class Parser {
 			if (dataList.size() == 0) {
 				return;
 			}
-			if (!Attribute.isNameTaken(attributes, name)) {
+			name = Attribute.isNameTaken(attributes, name);
+			if (!name.equals("BADNAME")) {
 				attributes.add(new Attribute(name, dataList));
-			} else {
-
 			}
-		}
-	}
-
-	private static void personTags(Attribute at) {
-		for (String person : at.list) {
-			person.contains("(Cousin)");
 		}
 	}
 
