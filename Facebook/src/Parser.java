@@ -22,12 +22,25 @@ public class Parser {
 	static ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 	static HashSet<Contact> contacts = new HashSet<Contact>();
 	static ArrayList<Message> messageList = new ArrayList<Message>();
+	static ArrayList<String> friendsAList = new ArrayList<String>();
 
 	public static void clearAttribute() {
 		attributes = new ArrayList<Attribute>();
 		Attribute.resetCount();
 	}
-
+	
+	public static String getContactName(int pID)
+	{
+		for(Contact c: contacts)
+		{
+			if(c.getpID() == pID)
+			{
+				return c.fullName();
+			}
+		}
+		return "NO NAME";
+	}
+	
 	// This class gets passed the index.htm file and finds the rest of the
 	// needed files
 	public static ArrayList<Attribute> parseMain(String path) throws IOException {
@@ -65,16 +78,12 @@ public class Parser {
 	}
 
 	public static void parseFriends(Document doc) {
-		ArrayList<String> friends = new ArrayList<String>();
 		Elements friendsList = doc.select("div.contents > div > ul > li");
 		for (Element e : friendsList) {
-			friends.add(e.text());
+			friendsAList.add(e.text());
 			parseContacts(e.text());
 		}
-		attributes.add(new Attribute("Friend", friends));
-		/**for (Contact c : contacts) {
-			c.printContact();
-		}**/
+		attributes.add(new Attribute("Friend", friendsAList));
 	}
 
 	public static void parseMessages(Document doc) {
