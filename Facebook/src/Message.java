@@ -18,19 +18,25 @@ public class Message {
 		this.mID = mIDcount++;
 	}
 	
-	public String toString()
+	public String toString(int x)
 	{
 		String result;
-		result = this.threadID + ":" + this.mID + " " + this.name + " " + date + " ";
-		if(this.message.length() > 15)
+		result = this.threadID + ":" + this.mID + " " + this.name + "\t\t" + date + "\t\t";
+		if(this.message.length() > x)
 		{
-			result += message.substring(0, 14);
+			result += message.substring(0, x-1);
 		}
 		else
 		{
 			result += message;
 		}
 		return result;
+	}
+	
+	//change the size of the value in to String to change the length of the message returned
+	public void printMessage()
+	{
+		System.out.println(this.toString(40));
 	}
 	
 	public int getThreadID()

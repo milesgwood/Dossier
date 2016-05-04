@@ -99,7 +99,7 @@ public class ParserTest {
 	public void testParser() throws IOException {
 		Parser.clearAttribute();
 		ArrayList<Attribute> attributes = Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
-		ArrayList<String> names = Attribute.allNames(attributes);
+		ArrayList<String> names = Attribute.printAllNames(attributes);
 		// System.out.println(names.toString());
 		assertEquals(names.size(), 27);
 		assertTrue(names.contains("Pages You Admin"));

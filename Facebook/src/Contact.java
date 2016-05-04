@@ -1,9 +1,7 @@
 import java.util.ArrayList;
 
 public class Contact {
-	private String first = null;
-	private String middle = null;
-	private String last = null;
+	private ArrayList<String> names = new ArrayList<String>();
 	private int pID;
 	public static int countID = 1;
 	private ContactType type = ContactType.DEFAULT;
@@ -11,32 +9,25 @@ public class Contact {
 	ArrayList<String> email = null;
 
 	Contact(String first, String last) {
-		this.first = first;
-		this.last = last;
+		names.add(first);
+		names.add(last);
 		this.pID = new Integer(countID++);
 	}
 
 	Contact(String first, String middle, String last) {
-		this.first = first;
-		this.middle = middle;
-		this.last = last;
+		names.add(first);
+		names.add(middle);
+		names.add(last);
 		this.pID = new Integer(countID++);
 	}
 	
 	Contact(String[] split, int id)
 	{
-		this.first = split[0];
+		for(String s : split)
+		{
+			names.add(s);
+		}
 		this.pID = id;
-		if(split.length == 2)
-		{
-			this.last = split[1];
-		}
-		if(split.length > 2)
-		{
-			this.middle = split[1];
-			this.last = split[2];
-		}
-		Parser.contacts.add(this);
 	}
 	
 	public void setType(ContactType type)
@@ -45,18 +36,11 @@ public class Contact {
 	}
 	
 	public Contact(String[] split) {
-		this.first = split[0];
+		for(String s : split)
+		{
+			names.add(s);
+		}
 		this.pID = new Integer(countID++);
-		if(split.length == 2)
-		{
-			this.last = split[1];
-		}
-		if(split.length > 2)
-		{
-			this.middle = split[1];
-			this.last = split[2];
-		}
-		Parser.contacts.add(this);
 	}
 
 	public int getpID()
@@ -66,26 +50,23 @@ public class Contact {
 	
 	public String fullName()
 	{
-		if(this.middle != null)
+		String full = new String();
+		for(String s: names)
 		{
-			return this.first + " " + this.middle + " " + this.last;
+			full += s + " ";
 		}
-		return this.first + " " + this.last;
+		full = full.trim();
+		return full;
 	}
 
 	public String toString() {
-		String result = "";
-		result = first;
-		if (middle != null) {
-			result += " " + middle;
-		}
-		result += " " + last;
+		String result = this.fullName();
 		if (email != null) {
 			for (String address : email) {
 				result += " " + address + " ";
 			}
 		}
-		return result + " " + this.pID;
+		return result + " " + this.pID + " " + this.type;
 	}
 
 	public void printContact() {

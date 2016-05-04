@@ -52,7 +52,7 @@ public class Parser {
 		}
 		String[] splitNames = name.split("\\s+");
 		Contact newC = new Contact(splitNames);
-		newC.printContact();
+		contacts.add(newC);
 		return newC.getpID();
 	}
 	
@@ -64,7 +64,7 @@ public class Parser {
 		}
 		String[] splitNames = name.split("\\s+");
 		Contact newC = new Contact(splitNames);
-		//System.out.println(newC.fullName());
+		contacts.add(newC);
 		return newC;
 	}
 
@@ -136,19 +136,22 @@ public class Parser {
 			if (info.length > 3) {
 				newContact = new Contact(info[0], info[1], info[2]);
 				newContact.setEmail(info[3].substring(1, info[3].length() - 1));
-				contacts.add(newContact);
+				newContact.setType(ContactType.FRIEND);
 			} else {
 				newContact = new Contact(info[0], info[1]);
 				newContact.setEmail(info[2].substring(1, info[2].length() - 1));
-				contacts.add(newContact);
+				newContact.setType(ContactType.FRIEND);
 			}
 		} else {
 			if (info.length > 2) {
-				contacts.add(new Contact(info[0], info[1], info[2]));
+				newContact = new Contact(info[0], info[1], info[2]);
+				newContact.setType(ContactType.FRIEND);
 			} else {
-				contacts.add(new Contact(info[0], info[1]));
+				newContact = new Contact(info[0], info[1]);
+				newContact.setType(ContactType.FRIEND);
 			}
 		}
+		contacts.add(newContact);
 	}
 
 	// Format is "div.contents > div > table > tbody > tr > td > ul > li"
@@ -295,5 +298,4 @@ public class Parser {
 		}
 		return list;
 	}
-
 }

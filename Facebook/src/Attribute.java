@@ -30,13 +30,18 @@ public class Attribute {
 		return this.elementID;
 	}
 
-	public static ArrayList<String> allNames(ArrayList<Attribute> attributes) {
+	public static ArrayList<String> printAllNames(ArrayList<Attribute> attributes) {
 		ArrayList<String> names = new ArrayList<String>();
 		for (Attribute att : attributes) {
 			names.add(att.getName());
 		}
 		return names;
 	}
+	
+	public void printAttribute() {
+		System.out.println(this.toString());
+	}
+	
 
 	public String toString() {
 		return (getID() + ":" + getName() + "\n\t" + printList() + "\n");
