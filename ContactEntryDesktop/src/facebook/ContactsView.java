@@ -1,3 +1,4 @@
+package facebook;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
@@ -28,7 +29,7 @@ public class ContactsView {
 		g = new SparseMultigraph<Integer, String>(); // Integer is our node adn
 														// String is our edge
 		// Add some vertices. From above we defined these to be type Integer.
-		Iterator<Contact> it = Parser.contacts.iterator();
+		Iterator<Contact> it = contacts.iterator();
 		for(int i = 0; i < 100 ; i++)
 		{
 			g.addVertex(it.next().getpID());

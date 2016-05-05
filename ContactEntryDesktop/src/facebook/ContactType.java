@@ -1,3 +1,4 @@
+package facebook;
 
 public enum ContactType {
 	FAMILY (10),

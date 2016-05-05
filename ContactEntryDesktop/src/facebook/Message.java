@@ -1,3 +1,4 @@
+package facebook;
 
 public class Message {
 	private int pID;
