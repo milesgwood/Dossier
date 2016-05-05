@@ -7,7 +7,7 @@ public class Contact {
 	public static int countID = 1;
 	private ContactType type = ContactType.DEFAULT;
 
-	ArrayList<String> email = null;
+	String email = "";
 
 	Contact(String first, String last) {
 		names.add(first);
@@ -49,6 +49,15 @@ public class Contact {
 		return this.pID;
 	}
 	
+	public ArrayList<String> getListofNames()
+	{
+		return this.names;
+	}
+	
+	public ContactType getType(){
+		return this.type;
+	}
+	
 	public String fullName()
 	{
 		String full = new String();
@@ -62,10 +71,8 @@ public class Contact {
 
 	public String toString() {
 		String result = this.fullName();
-		if (email != null) {
-			for (String address : email) {
-				result += " " + address + " ";
-			}
+		if (email.length() > 0) {
+				result += " " + email + " ";
 		}
 		return result + " " + this.pID + " " + this.type;
 	}
@@ -75,9 +82,11 @@ public class Contact {
 	}
 
 	public void setEmail(String newEmail) {
-		if (this.email == null) {
-			this.email = new ArrayList<String>();
-		}
-		this.email.add(newEmail);
+			this.email = newEmail;
+	}
+	
+	public String getEmail()
+	{
+		return this.email;
 	}
 }

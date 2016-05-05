@@ -3,7 +3,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DatabaseManagment {
-	public static void main(String args[]) {
+	public static void createDossierAndContact() {
 		//deleteTable();
 		Connection c = null;
 		Statement stmt = null;
@@ -13,8 +13,8 @@ public class DatabaseManagment {
 			System.out.println("Opened database successfully");
 
 			stmt = c.createStatement();
-			String sql =    " CREATE TABLE IF NOT EXISTS People" + 
-					 " (ID INT PRIMARY KEY NOT NULL, " + 
+			String sql =    " CREATE TABLE IF NOT EXISTS contacts" + 
+					 " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 					 " FIRST VARCHAR(15) NOT NULL, " + 
 					 " MIDDLE VARCHAR(15)," + 
 					 " LAST VARCHAR(15)," + 
@@ -44,7 +44,7 @@ public class DatabaseManagment {
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:People.sqlite");
+			c = DriverManager.getConnection("jdbc:sqlite:Dossier.sqlite");
 			System.out.println("Opened database successfully");
 			stmt = c.createStatement();
 			String sql =  "DROP TABLE contacts;";
@@ -58,41 +58,51 @@ public class DatabaseManagment {
 		System.out.println("Table Dropped");
 	}
 	
-	public static void addFBContacts(int pid, ArrayList<String> names, String type, String email) {
+	public static boolean addFBContacts(ArrayList<String> names, String type, String email) {
+	createDossierAndContact();
 		Connection c = null;
 		Statement stmt = null;
+		String sql = "";
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:People.sqlite");
+			c = DriverManager.getConnection("jdbc:sqlite:Dossier.sqlite");
 			System.out.println("Opened database successfully");
 			stmt = c.createStatement();
-			String sqlHead =  "INSERT INTO contacts(ID, FIRST, TYPE";
-			String sqlValues = "(" + pid + "," + names.get(0) + "," + type;
-			if(names.size() > 1)
-			{
-				sqlHead += " , MIDDLE";
-				sqlValues += "," + names.get(1);
-			}
+			String sqlHead =  "INSERT INTO contacts(FIRST, TYPE";
+			String sqlValues = "('" + names.get(0) + "', '" + type + "'";
 			if(names.size() > 2)
 			{
+				sqlHead += " , MIDDLE";
+				sqlValues += ", '" + names.get(1) +"'";
 				sqlHead += " , LAST";
-				sqlValues += "," + names.get(2);
+				sqlValues += ", '" + names.get(2) + "'";
 			}
-			if(email != null)
+			else if(names.size() > 1)
+			{
+				sqlHead += " , LAST";
+				sqlValues += ", '" + names.get(1) + "'";
+			}
+			if(email.length() > 0)
 			{
 				sqlHead += " , EMAIL";
-				sqlValues += "," + email;
+				sqlValues += ", '" + email + "'";
 			}
-			sqlHead += ")";
+			sqlHead += ") VALUES ";
 			sqlValues += ");";
-			System.out.println(sqlHead + sqlValues);
-			//stmt.executeUpdate(sql);
+			sql = sqlHead + sqlValues;
+			
+			//System.out.println(sqlHead + sqlValues);
+			stmt.executeUpdate(sql);
+			
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
+			System.err.println(sql);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 			System.exit(0);
 		}
-		System.out.println("Table Dropped");
+		//System.out.println("Added" + names.get(0) + " " + pid);
+		return true;
 	}
 }

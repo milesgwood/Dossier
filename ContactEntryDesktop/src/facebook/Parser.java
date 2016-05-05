@@ -51,6 +51,7 @@ public class Parser {
 				return c.getpID();
 			}
 		}
+		name = name.replace("'", "");
 		String[] splitNames = name.split("\\s+");
 		Contact newC = new Contact(splitNames);
 		contacts.add(newC);
@@ -63,6 +64,7 @@ public class Parser {
 				return c;
 			}
 		}
+		name = name.replace("'", "");
 		String[] splitNames = name.split("\\s+");
 		Contact newC = new Contact(splitNames);
 		contacts.add(newC);
@@ -114,6 +116,7 @@ public class Parser {
 		//This portion finds who the owner of the facebook file is
 		mainName = doc.select("div.contents > h1").first().text();
 		myNames.add(mainName);
+		mainName = mainName.replace("'", "");
 		contacts.add(new Contact(mainName.split("\\s+"), 0));
 		
 		//Parse the body
@@ -131,6 +134,7 @@ public class Parser {
 
 	private static void parseContacts(String name) {
 		boolean hasEmail = name.endsWith(")");
+		name = name.replace("'", "");
 		String[] info = name.split("\\s+");
 		Contact newContact;
 		if (hasEmail) {
