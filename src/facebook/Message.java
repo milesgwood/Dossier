@@ -61,6 +61,7 @@ public class Message {
 	{
 		return Parser.findIDNum(this.name);
 	}
+	
 	public String messageSenderName()
 	{
 		return this.name;

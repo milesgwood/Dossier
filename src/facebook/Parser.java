@@ -284,4 +284,13 @@ public class Parser {
 		}
 		return list;
 	}
+
+	public static int getMessageCount() {
+		
+		return messageList.size();
+	}
+
+	public static int getThreadCount() {
+		return (messageList.get(messageList.size() -1)).getThreadID();
+	}
 }
