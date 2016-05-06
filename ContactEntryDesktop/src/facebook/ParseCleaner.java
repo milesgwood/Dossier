@@ -20,7 +20,7 @@ public class ParseCleaner {
 			type = ContactType.DEFAULT;
 			truncated = person.substring(0, person.indexOf('('));
 			truncated = truncated.trim();
-			pID = Parser.getpID(truncated);
+			pID = Parser.findIDNum(truncated);
 			names = truncated.split("\\s+");
 			
 			if(person.contains("(Cousin)")) type = ContactType.COUSIN;

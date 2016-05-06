@@ -155,7 +155,7 @@ public class ParserTest {
 		Parser.clearAttribute();
 		Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
 		assertEquals(Parser.getContactName(0), "Miles Greatwood");
-		assertEquals(Parser.getpID("Miles Greatwood"), 0);
+		assertEquals(Parser.findIDNum("Miles Greatwood"), 0);
 	}
 
 	@Test

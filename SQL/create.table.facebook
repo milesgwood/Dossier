@@ -1,0 +1,10 @@
+select count(*) from fb;
+select * from fb;
+
+select count(*) from contacts;
+
+select * from fb as a join fb as b 
+	ON a.first == b.first
+AND a.type != b.type
+AND a.id == b.id
+ORDER BY a.first, b.first

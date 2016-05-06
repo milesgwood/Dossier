@@ -56,9 +56,10 @@ public class Message {
 	{
 		return this.date;
 	}
+	
 	public int messageSenderID()
 	{
-		return Parser.getpID(this.name);
+		return Parser.findIDNum(this.name);
 	}
 	public String messageSenderName()
 	{

@@ -24,8 +24,7 @@ public class Parser {
 	static HashSet<Contact> contacts = new HashSet<Contact>();
 	static ArrayList<Message> messageList = new ArrayList<Message>();
 	static ArrayList<String> friendsAList = new ArrayList<String>();
-	static HashSet<String> myNames = new HashSet<String>();
-	static String mainName;
+	static String mainName = "Miles Greatwood";
 
 	public static String getContactName(int pID) {
 		for (Contact c : contacts) {
@@ -45,13 +44,13 @@ public class Parser {
 		return null;
 	}
 
-	public static int getpID(String name) {
+	public static int findIDNum(String name) {
+		name = name.replace("'", "");
 		for (Contact c : contacts) {
 			if (c.fullName().equals(name)) {
 				return c.getpID();
 			}
 		}
-		name = name.replace("'", "");
 		String[] splitNames = name.split("\\s+");
 		Contact newC = new Contact(splitNames);
 		contacts.add(newC);
@@ -59,30 +58,16 @@ public class Parser {
 	}
 	
 	public static Contact getContact(String name) {
+		name = name.replace("'", "");
 		for (Contact c : contacts) {
 			if (c.fullName().equals(name)) {
 				return c;
 			}
 		}
-		name = name.replace("'", "");
 		String[] splitNames = name.split("\\s+");
 		Contact newC = new Contact(splitNames);
 		contacts.add(newC);
 		return newC;
-	}
-
-	private static void setMyOtherNames() {
-		for (Attribute a : attributes) {
-			if (a.getName().equals("Previous Name")) {
-				for (String name : a.getInfo()) {
-					Parser.myNames.add(name);
-					for (String s : name.split(" - ")) {
-						myNames.add(s);
-					}
-				}
-				return;
-			}
-		}
 	}
 
 	public static Elements removeLinks(Elements set) {
@@ -113,10 +98,7 @@ public class Parser {
 		if (links == null) {
 			links = doc.select("div.nav > ul > li > a[href]");
 		}
-		//This portion finds who the owner of the facebook file is
-		mainName = doc.select("div.contents > h1").first().text();
-		myNames.add(mainName);
-		mainName = mainName.replace("'", "");
+		//mainName = doc.select("div.contents > h1").first().text();
 		contacts.add(new Contact(mainName.split("\\s+"), 0));
 		
 		//Parse the body
@@ -125,7 +107,6 @@ public class Parser {
 		input = new File(home + friends);
 		doc = Jsoup.parse(input, "UTF-8");
 		parseFriends(doc);
-		setMyOtherNames();
 		input = new File(home + messages);
 		doc = Jsoup.parse(input, "UTF-8");
 		parseMessages(doc);
@@ -244,8 +225,8 @@ public class Parser {
 			if (!e.text().endsWith(".com")) {
 				name = e.text();
 				date = e.nextElementSibling().text();
-				pID = getpID(name);
-				if (myNames.contains(name)) {
+				pID = findIDNum(name);
+				if (mainName.equals(name)) {
 					pID = 0;
 				}
 				message = e.parent().parent().nextElementSibling().text();

@@ -11,7 +11,7 @@ public class SQLParsing {
 		try {
 			String sCurrentLine, result;
 			StringBuilder f = new StringBuilder();
-			br = new BufferedReader(new FileReader("create.table.contacts.sql"));
+			br = new BufferedReader(new FileReader("create.table.fb.sql"));
 			while ((sCurrentLine = br.readLine()) != null) {
 				f.append(" \" " + sCurrentLine + "\" + \n");
 			}

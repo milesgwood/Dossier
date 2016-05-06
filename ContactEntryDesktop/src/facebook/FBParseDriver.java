@@ -10,14 +10,20 @@ import dataEntry.DatabaseManagment;
 public class FBParseDriver {
 
 	public static void main(String[] args) throws IOException {
-		Parser.parseMain("/cs/home/stu/greatwmc/Downloads/fb/index.htm");
+		Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
 		ParseCleaner.clean();
+		
 		//printAllAttributes(Parser.attributes);
 		//printAllContacts(Parser.contacts);
-		Contact c = Parser.contacts.iterator().next();
 		//printAllMessages(Parser.messageList);
-		//deleteTable();
+		
+		DatabaseManagment.deleteTable("contacts");
+		DatabaseManagment.deleteTable("fb");
+		DatabaseManagment.createDossierTables();
+		DatabaseManagment.dossierConnect();
 		addAllContactsToDatabase(Parser.contacts);
+		DatabaseManagment.dossierCloseConnection();
+		System.out.print(Parser.contacts.size());
 		//ContactsView.makeContactsGraphView(Parser.contacts);
 	}
 	
@@ -25,7 +31,7 @@ public class FBParseDriver {
 		ArrayList<Integer> failed = new ArrayList<Integer>();
 		for(Contact c: contacts)
 		{
-			if(!DatabaseManagment.addFBContacts(c.getListofNames(), c.getType().toString(), c.getEmail()))
+			if(!DatabaseManagment.addFBContacts(c.getpID(), c.getListofNames(), c.getType().toString(), c.getEmail()))
 			{
 				failed.add(c.getpID());
 			}

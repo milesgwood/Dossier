@@ -26,7 +26,7 @@ public class Contact {
 	{
 		for(String s : split)
 		{
-			names.add(s);
+			names.add(s.replace("'", ""));
 		}
 		this.pID = id;
 	}
@@ -39,7 +39,7 @@ public class Contact {
 	public Contact(String[] split) {
 		for(String s : split)
 		{
-			names.add(s);
+			names.add(s.replace("'", ""));
 		}
 		this.pID = new Integer(countID++);
 	}
