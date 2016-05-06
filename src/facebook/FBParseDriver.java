@@ -10,26 +10,31 @@ import dataEntry.DatabaseManagment;
 public class FBParseDriver {
 
 	public static void main(String[] args) {
-
 		// printAllAttributes(Parser.attributes);
 		try {
-			Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
-			ParseCleaner.clean();
+		//Create info objects
+			//Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
+			//ParseCleaner.clean();
+		
+		//Delete Tables if needed and recreate them
 			//DatabaseManagment.deleteTable("contacts");
 			//DatabaseManagment.deleteTable("fb");
 			//DatabaseManagment.deleteTable("messages");
+			//DatabaseManagment.deleteTable("typeMultipliers");
 			DatabaseManagment.createDossierTables();
-			DatabaseManagment.dossierConnect(false);
-			
+			//DatabaseManagment.dossierConnect(false);
+		
+		//Create the fb table with contacts
 			// printAllContacts(Parser.contacts);
-			// populateFbTable();
-			
+			//populateFbTable();
+		
+		//Create message table
 			//printAllMessages(Parser.messageList);
 			//populateMessages();
 			
 			// ContactsView.makeContactsGraphView(Parser.contacts);
-			DatabaseManagment.dossierCloseConnection();
-		} catch (IOException e) {
+			//DatabaseManagment.dossierCloseConnection();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

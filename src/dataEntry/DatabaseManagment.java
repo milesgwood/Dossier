@@ -53,14 +53,19 @@ public class DatabaseManagment {
 	public static void createDossierTables() {
 		dossierConnect(true);
 		try {
+			//create contacts
 			stmt = c.createStatement();
 			sql = SQLParser.sqlStringCreation("create.table.contacts.sql");
 			stmt.executeUpdate(sql);
+			
 			//Create fb table
 			stmt = c.createStatement();
 			sql = SQLParser.sqlStringCreation("create.table.fb.sql");
 			stmt.executeUpdate(sql);
-			stmt = c.createStatement();
+			defaultTypeMultipliers();
+			
+			//Create messages
+			stmt = c.createStatement(); 
 			sql = SQLParser.sqlStringCreation("create.table.messages.sql");
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -72,11 +77,22 @@ public class DatabaseManagment {
 		System.out.println("Tables created successfully");
 	}
 
+	private static void defaultTypeMultipliers() throws SQLException {
+		stmt = c.createStatement();
+		stmt.executeUpdate("DROP TABLE IF EXISTS typeMultipliers;");
+		stmt = c.createStatement();
+		stmt.executeUpdate("CREATE TABLE typeMultipliers(TYPE VARCHAR(30), multiplier INT);");
+		stmt = c.createStatement();
+		stmt.executeUpdate("INSERT INTO typeMultipliers(TYPE) select distinct type from fb;");
+		stmt = c.createStatement();
+		stmt.executeUpdate("UPDATE typeMultipliers SET multiplier = rowid WHERE multiplier IS null;");
+	}
+
 	public static void deleteTable(String table) {
 		dossierConnect(true);
 		try {
 			stmt = c.createStatement();
-			String sql = "DROP TABLE " + table + ";";
+			String sql = "DROP TABLE IF EXISTS " + table + ";";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.close();
