@@ -17,8 +17,8 @@ public class FBParseDriver {
 		//printAllContacts(Parser.contacts);
 		//printAllMessages(Parser.messageList);
 		
-		DatabaseManagment.deleteTable("contacts");
-		DatabaseManagment.deleteTable("fb");
+		//DatabaseManagment.deleteTable("contacts");
+		//DatabaseManagment.deleteTable("fb");
 		DatabaseManagment.createDossierTables();
 		DatabaseManagment.dossierConnect();
 		addAllContactsToDatabase(Parser.contacts);
