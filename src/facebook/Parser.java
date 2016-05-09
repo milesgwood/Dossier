@@ -99,7 +99,9 @@ public class Parser {
 			links = doc.select("div.nav > ul > li > a[href]");
 		}
 		//mainName = doc.select("div.contents > h1").first().text();
-		contacts.add(new Contact(mainName.split("\\s+"), 0));
+		Contact owner = new Contact(mainName.split("\\s+"), 0);
+		owner.setType(ContactType.OWNER);
+		contacts.add(owner);
 		
 		//Parse the body
 		parseContentBodyLists(doc);

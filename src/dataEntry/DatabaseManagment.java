@@ -62,7 +62,6 @@ public class DatabaseManagment {
 			stmt = c.createStatement();
 			sql = SQLParser.sqlStringCreation("create.table.fb.sql");
 			stmt.executeUpdate(sql);
-			defaultTypeMultipliers();
 			
 			//Create messages
 			stmt = c.createStatement(); 
@@ -77,15 +76,25 @@ public class DatabaseManagment {
 		System.out.println("Tables created successfully");
 	}
 
-	private static void defaultTypeMultipliers() throws SQLException {
-		stmt = c.createStatement();
+	public static void defaultTypeMultipliers() {
+		try {
+			stmt = c.createStatement();
 		stmt.executeUpdate("DROP TABLE IF EXISTS typeMultipliers;");
 		stmt = c.createStatement();
-		stmt.executeUpdate("CREATE TABLE typeMultipliers(TYPE VARCHAR(30), multiplier INT);");
+		sql = SQLParser.sqlStringCreation("create.table.type.multiplier.sql");
+		stmt.execute(sql);
 		stmt = c.createStatement();
-		stmt.executeUpdate("INSERT INTO typeMultipliers(TYPE) select distinct type from fb;");
+		stmt.execute("INSERT INTO typeMultipliers(type) select distinct type from fb;");
+		stmt = c.createStatement();
+		stmt.executeUpdate("UPDATE typeMultipliers SET multiplier = 0 WHERE type='OWNER';");
+		stmt = c.createStatement();
+		stmt.executeUpdate("UPDATE typeMultipliers SET multiplier = 1 WHERE type='DEFAULT';");
 		stmt = c.createStatement();
 		stmt.executeUpdate("UPDATE typeMultipliers SET multiplier = rowid WHERE multiplier IS null;");
+		} catch (SQLException e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	public static void deleteTable(String table) {
@@ -141,7 +150,7 @@ public class DatabaseManagment {
 		try {
 			stmt = c.createStatement();
 			sql = "INSERT INTO messages(tID, mID, senderID, date, message) VALUES (" + threadID + " , " + messageID +  " , "  + messageSenderID + ", '" + date + "' " + " ,'" + message + "');";
-			System.out.println(sql);
+			//System.out.println(sql);
 			stmt.executeUpdate(sql);
 		} catch (Exception e) {
 			System.err.println(sql);
@@ -157,5 +166,17 @@ public class DatabaseManagment {
 		s = s.replace(",", " ");
 		s = s.replace("'", "");
 		return s;
+	}
+
+	
+	public static void populateContactsAndScores() {
+		try {
+			stmt = c.createStatement();
+			sql = SQLParser.sqlStringCreation("set.initial.scores.from.messages.sql");
+			//System.out.println(sql);
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package facebook;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -13,8 +14,8 @@ public class FBParseDriver {
 		// printAllAttributes(Parser.attributes);
 		try {
 		//Create info objects
-			//Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
-			//ParseCleaner.clean();
+			Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
+			ParseCleaner.clean();
 		
 		//Delete Tables if needed and recreate them
 			//DatabaseManagment.deleteTable("contacts");
@@ -22,18 +23,23 @@ public class FBParseDriver {
 			//DatabaseManagment.deleteTable("messages");
 			//DatabaseManagment.deleteTable("typeMultipliers");
 			DatabaseManagment.createDossierTables();
-			//DatabaseManagment.dossierConnect(false);
+			DatabaseManagment.dossierConnect(false);
 		
 		//Create the fb table with contacts
 			// printAllContacts(Parser.contacts);
-			//populateFbTable();
+			populateFbTable();
 		
 		//Create message table
 			//printAllMessages(Parser.messageList);
-			//populateMessages();
+			populateMessages();
+			DatabaseManagment.dossierCloseConnection();
+			DatabaseManagment.dossierConnect(false);
+			
+		//Fill contacts with fb info and scores based on messages
+			DatabaseManagment.populateContactsAndScores();
 			
 			// ContactsView.makeContactsGraphView(Parser.contacts);
-			//DatabaseManagment.dossierCloseConnection();
+			DatabaseManagment.dossierCloseConnection();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -47,10 +53,11 @@ public class FBParseDriver {
 		}
 	}
 
-	public static void populateFbTable() throws IOException {
+	public static void populateFbTable(){
 		// printAllContacts(Parser.contacts);
 		addAllContactsToDatabase(Parser.contacts);
-		System.out.print(Parser.contacts.size());
+		DatabaseManagment.defaultTypeMultipliers();
+		System.out.println("Size of contacts list: - " +  Parser.contacts.size());
 	}
 
 	private static void addAllContactsToDatabase(HashSet<Contact> contacts) {
@@ -61,7 +68,7 @@ public class FBParseDriver {
 				failed.add(c.getpID());
 			}
 		}
-		System.out.println(failed.size() + "failed");
+		System.out.println(failed.size() + " failed");
 	}
 
 	private static void printAllMessages(ArrayList<Message> messageList) {

@@ -8,7 +8,8 @@ public enum ContactType {
 	COUSIN (4),
 	RELATIVE (3),
 	FRIEND (2),
-	DEFAULT (1);
+	DEFAULT (1),
+	OWNER(0);
 	
 	private final int importance;
 	
