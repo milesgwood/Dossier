@@ -11,37 +11,54 @@ import dataEntry.DatabaseManagment;
 public class FBParseDriver {
 
 	public static void main(String[] args) {
-		// printAllAttributes(Parser.attributes);
 		try {
 		//Create info objects
 			Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
 			ParseCleaner.clean();
+			printAllAttributes(Parser.attributes);
 		
 		//Delete Tables if needed and recreate them
 			//DatabaseManagment.deleteTable("contacts");
 			//DatabaseManagment.deleteTable("fb");
 			//DatabaseManagment.deleteTable("messages");
 			//DatabaseManagment.deleteTable("typeMultipliers");
+			DatabaseManagment.deleteTable("owner_info");
+			//DatabaseManagment.deleteAll();
 			DatabaseManagment.createDossierTables();
 			DatabaseManagment.dossierConnect(false);
+			
+			//add owner info
+			populateOwnerAttributes(Parser.attributes);
+			
 		
 		//Create the fb table with contacts
-			// printAllContacts(Parser.contacts);
-			populateFbTable();
+			//printAllContacts(Parser.contacts);
+			//populateFbTable();
 		
 		//Create message table
 			//printAllMessages(Parser.messageList);
-			populateMessages();
-			DatabaseManagment.dossierCloseConnection();
-			DatabaseManagment.dossierConnect(false);
+			//populateMessages();
+			//DatabaseManagment.dossierCloseConnection();
+			//DatabaseManagment.dossierConnect(false);
 			
 		//Fill contacts with fb info and scores based on messages
-			DatabaseManagment.populateContactsAndScores();
+			//DatabaseManagment.populateContactsAndScores();
 			
 			// ContactsView.makeContactsGraphView(Parser.contacts);
 			DatabaseManagment.dossierCloseConnection();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private static void populateOwnerAttributes(ArrayList<Attribute> attributes) {
+		for(Attribute a: attributes)
+		{
+			if(a.getName().equals("Friend")) continue;
+			for(String info: a.list)
+			{
+				DatabaseManagment.addOwnerInfo(a.getName(), info, 1);
+			}
 		}
 	}
 

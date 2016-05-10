@@ -58,6 +58,11 @@ public class DatabaseManagment {
 			sql = SQLParser.sqlStringCreation("create.table.contacts.sql");
 			stmt.executeUpdate(sql);
 			
+			//create the owner info table
+			stmt = c.createStatement();
+			sql = SQLParser.sqlStringCreation("create.table.owner_info.sql");
+			stmt.executeUpdate(sql);
+			
 			//Create fb table
 			stmt = c.createStatement();
 			sql = SQLParser.sqlStringCreation("create.table.fb.sql");
@@ -178,5 +183,39 @@ public class DatabaseManagment {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void addOwnerInfo(String name, String info, int weight) {
+		name = cleanSqlString(name);
+		info = cleanSqlString(info);
+		try {
+			stmt = c.createStatement();
+			sql = "INSERT INTO owner_info(type, info, weight) VALUES ('" + name + "' , '" + info +  "' , "  + weight + ");";
+			stmt.executeUpdate(sql);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static Connection getConnection(){
+		try {
+			if(c == null || c.isClosed())
+			{
+				dossierConnect(true);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return c;
+	}
+
+	public static void deleteAll() {
+		deleteTable("contacts");
+		deleteTable("fb");
+		deleteTable("messages");
+		deleteTable("typeMultipliers");
+		deleteTable("owner_info");
+		
 	}
 }

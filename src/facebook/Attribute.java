@@ -42,7 +42,6 @@ public class Attribute {
 	public void printAttribute() {
 		System.out.println(this.toString());
 	}
-	
 
 	public String toString() {
 		return (getID() + ":" + getName() + "\n\t" + printList() + "\n");

@@ -1,9 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>NAME OF PERSON HERE</title>
-  <style type="text/css">
+<title>$name</title>
+<style type="text/css">
 body { background-color:black }
+h1 {
+	font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+	color:rgb(0,255,0);
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 14px;
+}
+h2 {
+	font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+	color:rgb(0,255,0);
+	font-size: 17px;
+	font-weight: 500;
+	line-height: 14px;
+}
 p {
 	font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
 	color:rgb(0,255,0);
@@ -12,14 +26,16 @@ p {
 	font-variant: normal;
 	font-weight: 400;
 	line-height: 14px;
+	position: relative;
+	left: 40px
 }
-  </style>
+</style>
 </head>
-
 <body>
-<p>NAME IS HERE Does this look like spy text</p>
-</body>
-</html>
-
-
-
+<h1>Name: $name</h1>
+<h2>Date of Birth: $dob</h2>
+<h2>Hometown: $home</h2>
+<h2>Games:</h2>
+<p>$game</p>
+<h2>Hello:</h2>
+<p>$next</p>
