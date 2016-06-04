@@ -1,10 +1,7 @@
 package dataEntry;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import sql.SQLParser;
 
@@ -218,4 +215,8 @@ public class DatabaseManagment {
 		deleteTable("owner_info");
 		
 	}
+	
+	public static void main(String[] args) {
+		createDossierTables();
+    }
 }

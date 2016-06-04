@@ -43,25 +43,15 @@ public class Owner {
 		File htmlTemplateFile = new File("spy.html");
 		
 		String htmlString;
-		String name, dob, home, games, next;
-		
-		Connection c;
-		Statement stmt;
-		c = DatabaseManagment.getConnection();
+		String name;
+		String info;
 		name = DatabaseAccess.getFullName(0);
-		dob = DatabaseAccess.getInfoSingle("Birthday");
-		home = DatabaseAccess.getInfoSingle("Hometown");
-		games = DatabaseAccess.getInfoList("Game");
 		ArrayList<ArrayList<String>> data = DatabaseAccess.getAllOwnerInfo();
 		
 		try {
 			htmlString = FileUtils.readFileToString(htmlTemplateFile);
 			htmlString = htmlString.replace("$name", name);
-			htmlString = htmlString.replace("$dob", dob);
-			htmlString = htmlString.replace("$home", home);
-			htmlString = htmlString.replace("$game", games);
-			//int i = 0 ; i < data.size(); i++
-			String info;
+			
 			for(int i = 0 ; i < data.get(0).size(); i++)
 			{
 				htmlString = htmlString.concat("<h2>" + data.get(0).get(i) + ": ");
