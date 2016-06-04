@@ -13,15 +13,15 @@ import dataEntry.DatabaseAccess;
 import dataEntry.DatabaseInfoUpdate;
 
 public class TargetInfoDisplay {
-	
-	 /**
+
+	/**
      * Create the GUI and show it.  For thread safety,
      * this method should be invoked from the
      * event-dispatching thread.
      */
     static void showTargetInfoGUI(final int id) {
         //Create and set up the window.
-        JFrame frame = new JFrame("Dossier");
+        final JFrame frame = new JFrame("Dossier");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         final ArrayList<JPanel> textSectionsList = new ArrayList<JPanel>();
@@ -164,7 +164,25 @@ public class TargetInfoDisplay {
 			}
 		});
         
+        JButton back = new JButton("Back to Selection");
+        back.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		backButtonPressed();
+        	}
+        	
+        	private void backButtonPressed(){
+        		try {
+        			new Thread(new TargetSelectionAutoComplete()).start();
+					//TargetSelectionAutoComplete.showTargetSelectionGUI();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        		frame.dispose();
+        	}});
+        
         allInfo.add(submit);
+        allInfo.add(back);
          
         //Here is we add the info if we are editing
         
@@ -211,13 +229,13 @@ public class TargetInfoDisplay {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-            	showTargetInfoGUI(0);
-            }
-        });
-    }
+	public static void main(String[] args) {
+		// Schedule a job for the event-dispatching thread:
+		// creating and showing this application's GUI.
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				showTargetInfoGUI(0);
+			}
+		});
+	}
 }

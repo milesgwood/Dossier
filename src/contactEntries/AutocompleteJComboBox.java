@@ -16,16 +16,11 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
 /**
- * 
  * JComboBox with an autocomplete drop down menu. This class is hard-coded for
  * String objects, but can be
  * 
  * altered into a generic form to allow for any searchable item.
- * 
  * @author G. Cope
- *
- * 
- * 
  */
 
 public class AutocompleteJComboBox extends JComboBox {
@@ -35,11 +30,8 @@ public class AutocompleteJComboBox extends JComboBox {
 	private final Searchable<String, String> searchable;
 
 	/**
-	 * 
 	 * Constructs a new object based upon the parameter searchable
-	 * 
 	 * @param s
-	 * 
 	 */
 
 	public AutocompleteJComboBox(Searchable<String, String> s) {

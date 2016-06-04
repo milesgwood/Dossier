@@ -13,13 +13,7 @@ import javax.swing.*;
 import dataEntry.ContactIDNotFoundException;
 import dataEntry.DatabaseAccess;
 
-public class TargetSelectionAutoComplete {
-
-	public static void main(String[] args) throws Exception {
-
-		SwingUtilities.invokeAndWait(new Runnable() {
-
-			@Override
+public class TargetSelectionAutoComplete implements Runnable{
 
 			public void run() {
 
@@ -85,8 +79,8 @@ public class TargetSelectionAutoComplete {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
 			}
-		});
-	}
+		//});
+	//}
 
 	/**
 	 * This method restarts the selection screen when Swing freezes. An
@@ -101,5 +95,15 @@ public class TargetSelectionAutoComplete {
 			e.printStackTrace();
 		}
 		System.exit(0);
+	}
+	
+	public static void main(String[] args){
+		try {
+			new Thread(new TargetSelectionAutoComplete()).start();
+			//showTargetSelectionGUI();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
