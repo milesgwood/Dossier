@@ -12,8 +12,10 @@ import javax.swing.*;
 
 import dataEntry.ContactIDNotFoundException;
 import dataEntry.DatabaseAccess;
+import gui.DossierGuiFrame;
+import gui.DossierMenuBar;
 
-public class TargetSelectionAutoComplete implements Runnable{
+public class TargetSelectionAutoComplete implements Runnable {
 
 			public void run() {
 
@@ -22,7 +24,8 @@ public class TargetSelectionAutoComplete implements Runnable{
 				StringSearchable searchable = new StringSearchable(myWords);
 				final AutocompleteJComboBox combo = new AutocompleteJComboBox(searchable);
 
-				final JFrame frame = new JFrame("Select Target");
+				DossierGuiFrame.createNamedFrame("Select Target");
+				final JFrame frame = DossierGuiFrame.getFrame();
 				JButton select = new JButton("Select");
 				JButton reset = new JButton("Reset");
 				select.addActionListener(new ActionListener() {
@@ -41,6 +44,7 @@ public class TargetSelectionAutoComplete implements Runnable{
 						System.out.println(current);
 						try {
 							id = DatabaseAccess.getIdFromFullName(current);
+							DossierGuiFrame.setNewWindowLocation();
 							TargetInfoDisplay.showTargetInfoGUI(id);
 							frame.dispose();
 						} catch (ContactIDNotFoundException e) {

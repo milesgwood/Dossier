@@ -23,7 +23,7 @@ public class FBParseDriver {
 			//DatabaseManagment.deleteTable("messages");
 			//DatabaseManagment.deleteTable("typeMultipliers");
 			//DatabaseManagment.deleteTable("owner_info");
-			//DatabaseManagment.deleteAll();
+			DatabaseManagment.deleteAll();
 			DatabaseManagment.createDossierTables();
 			DatabaseManagment.dossierConnect(false);
 			

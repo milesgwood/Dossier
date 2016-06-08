@@ -12,6 +12,7 @@ import javax.swing.*;
 
 import dataEntry.DatabaseAccess;
 import dataEntry.DatabaseInfoUpdate;
+import gui.DossierGuiFrame;
 import gui.SwingWindowChanger;
 
 public class TargetInfoDisplay {
@@ -22,8 +23,8 @@ public class TargetInfoDisplay {
 	 */
 	static void showTargetInfoGUI(final int id) {
 		// Create and set up the window.
-		final JFrame frame = new JFrame("Dossier");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		DossierGuiFrame.createNamedFrame("Dossier");
+		final JFrame frame = DossierGuiFrame.getFrame();
 
 		final ArrayList<JPanel> textSectionsList = new ArrayList<JPanel>();
 		final ArrayList<JPanel> buttonSectionsList = new ArrayList<JPanel>();

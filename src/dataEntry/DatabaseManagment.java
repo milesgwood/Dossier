@@ -93,6 +93,9 @@ public class DatabaseManagment {
 		stmt.executeUpdate("UPDATE typeMultipliers SET multiplier = 1 WHERE type='DEFAULT';");
 		stmt = c.createStatement();
 		stmt.executeUpdate("UPDATE typeMultipliers SET multiplier = rowid WHERE multiplier IS null;");
+		stmt = c.createStatement();
+		sql = SQLParser.sqlStringCreation("trigger.contact.multiplier.set.default.sql");
+		stmt.execute(sql);
 		} catch (SQLException e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			e.printStackTrace();
