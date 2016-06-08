@@ -26,6 +26,24 @@ public class DatabaseInfoUpdate {
 		}
 	}
 	
-	
-
+	public static void updateMultiplier(String oldType, String newType, int oldVal, int newVal)
+	{
+		Connection c;
+		PreparedStatement stmt;
+		String deleteSQL, addSQL, updateSQL;
+		
+		deleteSQL = "DELETE FROM typemultipliers WHERE type = '?';";
+		addSQL = "INSERT INTO typemultipliers VALUES('" + newType + "' , " + newVal + ");" ; 
+		updateSQL = "UPDATE contacts SET type = ?, multiplier = ? WHERE type = ?";
+		c = DatabaseManagment.getConnection();
+		try {
+			//TO DO
+			stmt = c.prepareStatement("NOTHING");
+			stmt.executeUpdate();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

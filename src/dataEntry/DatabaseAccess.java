@@ -145,7 +145,6 @@ public class DatabaseAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Here is the resultset " +info);
 		return info != null ? info: "";
 	}
 	
@@ -193,5 +192,85 @@ public class DatabaseAccess {
 			e.printStackTrace();
 		}
 		return info != null ? info: "Unknown";
+	}
+	
+	/**
+	 * This function finds out how many distinct multiplier classes there are.
+	 * Examples are brother, cousin, sister etc.
+	 * @return
+	 */
+	public static int getCountMultiplierCount()
+	{
+		Connection c;
+		PreparedStatement stmt;
+		ResultSet rs;
+		int count = 0;
+		
+		c = DatabaseManagment.getConnection();
+		try {
+			stmt = c.prepareStatement("SELECT COUNT(DISTINCT type) FROM typemultipliers;");
+			rs = stmt.executeQuery();
+			count  = rs.next()? rs.getInt(1) : 0;
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+
+	/**
+	 * This method returns all of the classes from typemiltipliers in a String array
+	 * @return
+	 */
+	public static String[] getMultiplierStrings() {
+		Connection c;
+		PreparedStatement stmt;
+		ResultSet rs;
+		String [] types = null;
+		
+		types = new String[getCountMultiplierCount()];
+		c = DatabaseManagment.getConnection();
+		try {
+			stmt = c.prepareStatement("SELECT DISTINCT type FROM typemultipliers;");
+			rs = stmt.executeQuery();
+			int index = 0;
+			while(rs.next())
+			{
+				types[index] = rs.getString(1);
+				index++;
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return types;
+	}
+
+
+	public static int getMulitplierNum(String type) {
+		Connection c;
+		PreparedStatement stmt;
+		ResultSet rs;
+		Integer multiplier = null;
+		
+		c = DatabaseManagment.getConnection();
+		try {
+			stmt = c.prepareStatement("SELECT multiplier FROM typemultipliers WHERE type = '" + type + "';");
+			rs = stmt.executeQuery();
+			rs.next();
+			multiplier = rs.getInt(1);
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return multiplier;
 	}
 }

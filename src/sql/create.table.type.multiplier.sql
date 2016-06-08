@@ -1,1 +1,1 @@
-CREATE TABLE typemultipliers(type VARCHAR(15), multiplier INT);
+CREATE TABLE typemultipliers(type VARCHAR(15) unique, multiplier INT);

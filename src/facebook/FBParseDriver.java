@@ -22,7 +22,7 @@ public class FBParseDriver {
 			//DatabaseManagment.deleteTable("fb");
 			//DatabaseManagment.deleteTable("messages");
 			//DatabaseManagment.deleteTable("typeMultipliers");
-			DatabaseManagment.deleteTable("owner_info");
+			//DatabaseManagment.deleteTable("owner_info");
 			//DatabaseManagment.deleteAll();
 			DatabaseManagment.createDossierTables();
 			DatabaseManagment.dossierConnect(false);
@@ -33,16 +33,16 @@ public class FBParseDriver {
 		
 		//Create the fb table with contacts
 			//printAllContacts(Parser.contacts);
-			//populateFbTable();
+			populateFbTable();
 		
 		//Create message table
 			//printAllMessages(Parser.messageList);
-			//populateMessages();
-			//DatabaseManagment.dossierCloseConnection();
-			//DatabaseManagment.dossierConnect(false);
+			populateMessages();
+			DatabaseManagment.dossierCloseConnection();
+			DatabaseManagment.dossierConnect(false);
 			
 		//Fill contacts with fb info and scores based on messages
-			//DatabaseManagment.populateContactsAndScores();
+			DatabaseManagment.populateContactsAndScores();
 			
 			// ContactsView.makeContactsGraphView(Parser.contacts);
 			DatabaseManagment.dossierCloseConnection();

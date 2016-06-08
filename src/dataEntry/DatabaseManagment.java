@@ -23,7 +23,7 @@ public class DatabaseManagment {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:Dossier.sqlite");
 			c.setAutoCommit(autoCommit);
-			System.out.println("Opened database successfully");
+			//System.out.println("Opened database successfully");
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			e.printStackTrace();
@@ -213,10 +213,5 @@ public class DatabaseManagment {
 		deleteTable("messages");
 		deleteTable("typeMultipliers");
 		deleteTable("owner_info");
-		
 	}
-	
-	public static void main(String[] args) {
-		createDossierTables();
-    }
 }
