@@ -1,7 +1,4 @@
-package gui;
-
-import events.DateLabelFormatter;
-import events.EventCreation;
+package events;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -18,6 +15,8 @@ import javax.swing.UIManager;
 
 import org.jdatepicker.impl.*;
 
+import gui.DossierGuiFrame;
+
 @SuppressWarnings("serial")
 public class EventEntryGui extends JPanel implements Runnable {
 
@@ -29,7 +28,7 @@ public class EventEntryGui extends JPanel implements Runnable {
 		createAndShowGUI();
 	}
 
-	EventEntryGui() {
+	public EventEntryGui() {
 		super(new GridLayout(8, 1));
 
 		JDatePickerImpl datePicker; // --THE COMPONENT WE USE FOR DATES

@@ -1,6 +1,7 @@
 package gui;
 
 import contactEntries.TargetSelectionAutoComplete;
+import events.EventEntryGui;
 import scores.EditMultipliersWindow;
 
 public class SwingWindowChanger {
