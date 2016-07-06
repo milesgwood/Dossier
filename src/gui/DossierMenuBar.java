@@ -32,9 +32,38 @@ public class DossierMenuBar {
 		menuBar.add(createFileMenu());
 		menuBar.add(createDefaultMenu());
 		menuBar.add(createNavigation());
+		menuBar.add(createSearchMenu());
 		return menuBar;
 	}
 	
+	private JMenu createSearchMenu() {
+		JMenu menu;
+		JMenuItem menuItem;
+		
+		// Build second menu in the menu bar.
+		menu = new JMenu("Search");
+		menuBar.add(menu);
+		menuItem = new JMenuItem("By Contacts");
+		menuItem.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//SwingWindowChanger.openTargetSelectionWindow();
+			}
+		});
+		menu.add(menuItem);
+		menuItem = new JMenuItem("By Events");
+		menuItem.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//SwingWindowChanger.openMultiplierEditWindow();
+			}
+		});
+		menu.add(menuItem);
+		return menu;
+	}
+
 	private JMenu createDefaultMenu(){
 		JMenu menu, submenu;
 		JMenuItem menuItem;
@@ -163,7 +192,7 @@ public class DossierMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Event Pressed");
-				//SwingWindowChanger.openTargetSelectionWindow();
+				SwingWindowChanger.openEventEntryGui();
 			}
 			
 		});
@@ -247,15 +276,5 @@ public class DossierMenuBar {
 		frame.setSize(450, 260);
 		frame.setVisible(true);
 		DossierGuiFrame.setNewWindowLocation();
-	}
-
-	public static void main(String[] args) {
-		// Schedule a job for the event-dispatching thread:
-		// creating and showing this application's GUI.
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				createAndShowGUI();
-			}
-		});
 	}
 }
