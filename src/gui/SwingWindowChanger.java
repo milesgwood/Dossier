@@ -28,4 +28,16 @@ public class SwingWindowChanger {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void openEventEntryGui() {
+		try {
+			DossierGuiFrame.setNewWindowLocation();
+			DossierGuiFrame.getFrame().dispose();
+			new Thread(new EventEntryGui()).start();
+			// TargetSelectionAutoComplete.showTargetSelectionGUI();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

@@ -9,6 +9,9 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.ButtonGroup;
 import javax.swing.JMenuBar;
 import javax.swing.KeyStroke;
+
+import dataEntry.DatabaseManagment;
+
 import javax.swing.ImageIcon;
  
 import javax.swing.JPanel;
@@ -21,22 +24,26 @@ public class DossierMenuBar {
 	
 	JTextArea output;
     JScrollPane scrollPane;
+    JMenuBar menuBar;
     
 	public JMenuBar createMenuBar() {
-		JMenuBar menuBar;
+		menuBar = new JMenuBar();
+		// Create the menu bar.
+		menuBar.add(createFileMenu());
+		menuBar.add(createDefaultMenu());
+		menuBar.add(createNavigation());
+		return menuBar;
+	}
+	
+	private JMenu createDefaultMenu(){
 		JMenu menu, submenu;
 		JMenuItem menuItem;
 		JRadioButtonMenuItem rbMenuItem;
 		JCheckBoxMenuItem cbMenuItem;
-
-		// Create the menu bar.
-		menuBar = new JMenuBar();
-
 		// Build the first menu.
 		menu = new JMenu("A Menu");
 		menu.setMnemonic(KeyEvent.VK_A);
 		menu.getAccessibleContext().setAccessibleDescription("The only menu in this program that has menu items");
-		menuBar.add(menu);
 
 		// a group of JMenuItems
 		menuItem = new JMenuItem("A text-only menu item", KeyEvent.VK_T);
@@ -91,7 +98,14 @@ public class DossierMenuBar {
 		menuItem = new JMenuItem("Another item");
 		submenu.add(menuItem);
 		menu.add(submenu);
-
+		return menu;
+	}
+	
+	private JMenu createNavigation()
+	{
+		JMenu menu;
+		JMenuItem menuItem;
+		
 		// Build second menu in the menu bar.
 		menu = new JMenu("Navigation");
 		menu.setMnemonic(KeyEvent.VK_N);
@@ -118,10 +132,75 @@ public class DossierMenuBar {
 			
 		});
 		menu.add(menuItem);
-
-		return menuBar;
+		return menu;
 	}
+	
+	private JMenu createFileMenu()
+	{
+		JMenu fileMenu, submenu;
+		JMenuItem menuItem;
+		
+		fileMenu = new JMenu("File");
+		submenu = new JMenu("New");
+		submenu.setMnemonic(KeyEvent.VK_S);
 
+		menuItem = new JMenuItem("Contact");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
+		menuItem.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Contact Pressed");
+				//SwingWindowChanger.openTargetSelectionWindow();
+			}
+		});
+		submenu.add(menuItem);
+		
+		menuItem = new JMenuItem("Event");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.ALT_MASK));
+		menuItem.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Event Pressed");
+				//SwingWindowChanger.openTargetSelectionWindow();
+			}
+			
+		});
+		submenu.add(menuItem);
+		fileMenu.add(submenu);
+		
+		//IMPORT SUBMENU
+		submenu = new JMenu("Import");
+		submenu.setMnemonic(KeyEvent.VK_S);
+		menuItem = new JMenuItem("Facebook Data");
+		menuItem.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Import Facebook Data");
+				facebook.FBParseDriver.fbParser();
+			}
+		});
+		submenu.add(menuItem);
+		fileMenu.add(submenu);
+		
+		//RESET MENU
+		fileMenu.addSeparator();
+		menuItem = new JMenuItem("Reset Database");
+		menuItem.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Delete Pressed");
+				DatabaseManagment.deleteAll();
+			}
+		});
+		fileMenu.add(menuItem);
+		return fileMenu;
+		
+	}
+	
 	public Container createContentPane() {
 		// Create the content-pane-to-be.
 		JPanel contentPane = new JPanel(new BorderLayout());
@@ -137,6 +216,7 @@ public class DossierMenuBar {
 
 		return contentPane;
 	}
+
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	protected static ImageIcon createImageIcon(String path) {
@@ -166,6 +246,7 @@ public class DossierMenuBar {
 		// Display the window.
 		frame.setSize(450, 260);
 		frame.setVisible(true);
+		DossierGuiFrame.setNewWindowLocation();
 	}
 
 	public static void main(String[] args) {

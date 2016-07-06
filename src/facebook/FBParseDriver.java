@@ -1,36 +1,35 @@
 package facebook;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 //My package imports
 import dataEntry.DatabaseManagment;
+import gui.SwingWindowChanger;
 
 public class FBParseDriver {
 
-	public static void main(String[] args) {
+	public static void fbParser() {
+		String fbLocation ="";
+		JOptionPane.showMessageDialog(new JFrame(), "Download your facebook history \n Instructions are here: https://www.facebook.com/help/212802592074644?in_context \n Expand the archive and select the index.htm file");
 		try {
 		//Create info objects
-			Parser.parseMain("/home/vice6/Downloads/FBMiles/index.htm");
+			fbLocation = gui.FileChooser.getFileLocation();
+			Parser.parseMain(fbLocation); //home/vice6/Downloads/FBMiles/index.htm
 			ParseCleaner.clean();
 			printAllAttributes(Parser.attributes);
-		
-		//Delete Tables if needed and recreate them
-			//DatabaseManagment.deleteTable("contacts");
-			//DatabaseManagment.deleteTable("fb");
-			//DatabaseManagment.deleteTable("messages");
-			//DatabaseManagment.deleteTable("typeMultipliers");
-			//DatabaseManagment.deleteTable("owner_info");
-			DatabaseManagment.deleteAll();
 			DatabaseManagment.createDossierTables();
 			DatabaseManagment.dossierConnect(false);
 			
 			//add owner info
 			populateOwnerAttributes(Parser.attributes);
 			
-		
 		//Create the fb table with contacts
 			//printAllContacts(Parser.contacts);
 			populateFbTable();
@@ -46,7 +45,11 @@ public class FBParseDriver {
 			
 			// ContactsView.makeContactsGraphView(Parser.contacts);
 			DatabaseManagment.dossierCloseConnection();
-		} catch (Exception e) {
+			JOptionPane.showMessageDialog(new JFrame(), "Done With Facebook Parse");
+		} catch (FileNotFoundException e){
+			JOptionPane.showMessageDialog(new JFrame(), "Could not find the index.htm file at this specified location: \n" + fbLocation);
+		}
+		catch	(Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -23,5 +23,6 @@
 	<classpathentry kind="lib" path="src/facebook/jsoup-1.9.1.jar"/>
 	<classpathentry kind="lib" path="sqlite-jdbc-3.8.11.2.jar"/>
 	<classpathentry kind="lib" path="src/html/commons-io-2.5.jar"/>
+	<classpathentry kind="lib" path="jdatepicker-1.3.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -68,6 +68,7 @@ public class EditMultipliersWindow extends JPanel implements Runnable {
 					JPanel sourcePanel = (JPanel) current.getParent();
 					JSpinner num = (JSpinner) sourcePanel.getComponent(1);
 					DatabaseInfoUpdate.updateMultiplier(current.getName(), (Integer) num.getValue());
+					DossierGuiFrame.setNewWindowLocation();
 					frame.dispose();
 					createAndShowGUI();
 				}
@@ -111,6 +112,7 @@ public class EditMultipliersWindow extends JPanel implements Runnable {
 				
 				DatabaseInfoUpdate.addNewMultiplier(name, num);
 				System.out.println("Adding " + name + " : " + num);
+				DossierGuiFrame.setNewWindowLocation();
 				frame.dispose();
 				createAndShowGUI();
 			}

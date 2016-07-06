@@ -69,6 +69,17 @@ public class DatabaseManagment {
 			stmt = c.createStatement(); 
 			sql = SQLParser.sqlStringCreation("create.table.messages.sql");
 			stmt.executeUpdate(sql);
+			
+			//create events
+			stmt = c.createStatement(); 
+			sql = SQLParser.sqlStringCreation("create.table.events.sql");
+			stmt.executeUpdate(sql);
+			
+			//create events
+			stmt = c.createStatement(); 
+			sql = SQLParser.sqlStringCreation("create.table.people.at.events.sql");
+			stmt.executeUpdate(sql);
+					
 			stmt.close();
 			c.close();
 		} catch (Exception e) {
@@ -216,5 +227,7 @@ public class DatabaseManagment {
 		deleteTable("messages");
 		deleteTable("typeMultipliers");
 		deleteTable("owner_info");
+		deleteTable("people_at_events");
+		deleteTable("events");
 	}
 }
