@@ -1,8 +1,7 @@
-package contactEntries;
+package contacts;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-//import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -13,7 +12,6 @@ import javax.swing.*;
 import dataEntry.ContactIDNotFoundException;
 import dataEntry.DatabaseAccess;
 import gui.DossierGuiFrame;
-import gui.DossierMenuBar;
 
 public class TargetSelectionAutoComplete implements Runnable {
 
@@ -23,7 +21,7 @@ public class TargetSelectionAutoComplete implements Runnable {
 				myWords.addAll(dataEntry.DatabaseSearching.getAllNames());
 				StringSearchable searchable = new StringSearchable(myWords);
 				final AutocompleteJComboBox combo = new AutocompleteJComboBox(searchable);
-
+				
 				DossierGuiFrame.createNamedFrame("Select Target");
 				final JFrame frame = DossierGuiFrame.getFrame();
 				JButton select = new JButton("Select");
@@ -45,7 +43,7 @@ public class TargetSelectionAutoComplete implements Runnable {
 						try {
 							id = DatabaseAccess.getIdFromFullName(current);
 							DossierGuiFrame.setNewWindowLocation();
-							TargetInfoDisplay.showTargetInfoGUI(id);
+							ContactInfoDisplay.showTargetInfoGUI(id);
 							frame.dispose();
 						} catch (ContactIDNotFoundException e) {
 							// TODO Auto-generated catch block CREATE A NEW
@@ -70,8 +68,6 @@ public class TargetSelectionAutoComplete implements Runnable {
 				});
 
 				JPanel namePanel = new JPanel(new FlowLayout());
-				// JPanel namePanel = new JPanel(new GridLayout(1,3));
-
 				namePanel.add(combo);
 				namePanel.add(select);
 				namePanel.add(reset);

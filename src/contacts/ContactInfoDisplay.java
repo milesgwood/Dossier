@@ -1,6 +1,5 @@
-package contactEntries;
+package contacts;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -15,7 +14,7 @@ import dataEntry.DatabaseInfoUpdate;
 import gui.DossierGuiFrame;
 import gui.SwingWindowChanger;
 
-public class TargetInfoDisplay {
+public class ContactInfoDisplay {
 
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import dataEntry.DatabaseManagment;
 
@@ -60,5 +61,28 @@ public class EventCreation {
 		}
 		System.out.println("New eid is " + eID);
 		return eID;
+	}
+	
+	public static ArrayList<String> getEventData(int eID) {
+		ArrayList<String> data = new ArrayList<String>();
+		try {
+			c = DatabaseManagment.getConnection();
+			String sql = "SELECT * FROM events WHERE eID == ?;";
+			stmt = c.prepareStatement(sql);
+			stmt.setInt(1, eID);
+			rs = stmt.executeQuery();
+			rs.next();
+			for(int i = 1; i < 9 ; i++)
+			{
+				System.out.print(rs.getString(i));
+				data.add(rs.getString(i));
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return data;
 	}
 }

@@ -5,14 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.apache.commons.io.*;
 
 import dataEntry.DatabaseAccess;
-import dataEntry.DatabaseManagment;
 
 public class Owner {
 	static String ownerAbsPath;
@@ -30,10 +27,6 @@ public class Owner {
 			if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE))
 				desktop.browse(uri);
 		} catch (Exception e) {
-			/*
-			 * I know this is bad practice but we don't want to do anything
-			 * clever for a specific error
-			 */
 			e.printStackTrace();
 		}
 	}

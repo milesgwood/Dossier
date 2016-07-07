@@ -1,4 +1,4 @@
-package contactEntries;
+package contacts;
 
 import java.awt.Component;
 import java.awt.event.FocusEvent;
@@ -20,9 +20,11 @@ import javax.swing.text.JTextComponent;
  * String objects, but can be
  * 
  * altered into a generic form to allow for any searchable item.
+ * 
  * @author G. Cope
  */
 
+@SuppressWarnings("rawtypes")
 public class AutocompleteJComboBox extends JComboBox {
 
 	static final long serialVersionUID = 4321421L;
@@ -31,6 +33,7 @@ public class AutocompleteJComboBox extends JComboBox {
 
 	/**
 	 * Constructs a new object based upon the parameter searchable
+	 * 
 	 * @param s
 	 */
 
@@ -74,6 +77,7 @@ public class AutocompleteJComboBox extends JComboBox {
 
 					SwingUtilities.invokeLater(new Runnable() {
 
+						@SuppressWarnings("unchecked")
 						@Override
 
 						public void run() {

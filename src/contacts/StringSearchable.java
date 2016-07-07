@@ -1,4 +1,4 @@
-package contactEntries;
+package contacts;
 
 import java.util.ArrayList;
 import java.util.Collection;

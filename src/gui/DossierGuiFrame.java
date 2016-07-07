@@ -6,9 +6,8 @@ import javax.swing.JFrame;
 
 public class DossierGuiFrame {
 	
-	private static JFrame frame = null;
+	protected static JFrame frame = null;
 	private static Point windowLocation = new Point(0,0);
-	
 	
 	public static void createNamedFrame(String name)
 	{
@@ -19,26 +18,12 @@ public class DossierGuiFrame {
 		// Create and set up the content pane.
 		DossierMenuBar menu = new DossierMenuBar();
 		frame.setJMenuBar(menu.createMenuBar());
-	}
-	
-	
-	private static void createAndShowDefaultFrame()
-	{
-		frame = new JFrame("Dossier");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocation(windowLocation);
-
-		// Create and set up the content pane.
-		DossierMenuBar menu = new DossierMenuBar();
-		frame.setJMenuBar(menu.createMenuBar());
-
-		// Display the window.
-		frame.pack();
-		frame.setVisible(true);
+		setFrame(frame);
 	}
 	
 	public static void setFrame(JFrame f){
 		frame = f;
+		setNewWindowLocation();
 	}
 	
 	public static void setNewWindowLocation()
@@ -57,8 +42,10 @@ public class DossierGuiFrame {
 		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new DossierGuiFrame();
-				createAndShowDefaultFrame();
+				createNamedFrame("Hello");
+				JFrame frame = getFrame();
+				frame.pack();
+				frame.setVisible(true);
 			}
 		});
 	}

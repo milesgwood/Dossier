@@ -25,17 +25,35 @@ public class DossierMenuBar {
 	JTextArea output;
     JScrollPane scrollPane;
     JMenuBar menuBar;
+    JMenu menu;
+	JMenuItem menuItem;
     
 	public JMenuBar createMenuBar() {
 		menuBar = new JMenuBar();
 		// Create the menu bar.
 		menuBar.add(createFileMenu());
-		menuBar.add(createDefaultMenu());
+		menuBar.add(createEditMenu());
 		menuBar.add(createNavigation());
 		menuBar.add(createSearchMenu());
+		menuBar.add(createDefaultMenu());
 		return menuBar;
 	}
 	
+	private JMenu createEditMenu() {
+		menu = new JMenu("Edit");
+		menuItem = new JMenuItem("Event");
+		menuItem.addActionListener(new ActionListener(){
+
+			//ADD A SLIDER SELECTOR FOR EVENTS AND ALSO CONTACTS SO THAT YOU CAN EDIT MORE EASILY
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SwingWindowChanger.openOldEventEditorWindow(12);
+			}
+		});
+		menu.add(menuItem);
+		return menu;
+	}
+
 	private JMenu createSearchMenu() {
 		JMenu menu;
 		JMenuItem menuItem;
@@ -192,7 +210,7 @@ public class DossierMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Event Pressed");
-				SwingWindowChanger.openEventEntryGui();
+				SwingWindowChanger.openNewEventWindow();
 			}
 			
 		});

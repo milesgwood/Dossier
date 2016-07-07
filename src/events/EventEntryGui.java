@@ -4,6 +4,9 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -18,17 +21,16 @@ import org.jdatepicker.impl.*;
 import gui.DossierGuiFrame;
 
 @SuppressWarnings("serial")
-public class EventEntryGui extends JPanel implements Runnable {
+public class EventEntryGui extends JPanel {
 
 	static JFrame frame;
 
-	@Override
-	public void run() {
-		UIManager.put("swing.boldMetal", Boolean.FALSE);
-		createAndShowGUI();
-	}
-
-	public EventEntryGui() {
+	/**
+	 * If the eID is less than 1 or doesn't exist than we make a new eID
+	 * 
+	 * @param eID
+	 */
+	public EventEntryGui(final int eID) {
 		super(new GridLayout(8, 1));
 
 		JDatePickerImpl datePicker; // --THE COMPONENT WE USE FOR DATES
@@ -70,6 +72,18 @@ public class EventEntryGui extends JPanel implements Runnable {
 			eventPanel.setLayout(new GridLayout(1, 2));
 			attribute = new JLabel(place);
 			value = new JTextField();
+			if (place.equalsIgnoreCase("city")) {
+				value.setText("Charlottesville");
+			}
+			;
+			if (place.equalsIgnoreCase("state")) {
+				value.setText("VA");
+			}
+			;
+			if (place.equalsIgnoreCase("country")) {
+				value.setText("USA");
+			}
+			;
 			eventPanel.add(attribute);
 			eventPanel.add(value);
 			this.add(eventPanel);
@@ -87,37 +101,92 @@ public class EventEntryGui extends JPanel implements Runnable {
 		saveButton.setText("Save");
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				extractEventInfo();
-				DossierGuiFrame.setNewWindowLocation();
+				saveEventInfo(eID);
+				DossierGuiFrame.setFrame(frame);
 				frame.dispose();
-				createAndShowGUI();
+				new SelectedAttendees();
 			}
 		});
 		this.add(saveButton);
 	}
 
-	private void extractEventInfo() {
+	/**
+	 * Create the GUI and show it. For thread safety, this method should be
+	 * invoked from the event dispatch thread.
+	 * 
+	 * @throws ParseException
+	 */
+	public static void editOldEventGUI(int eID) {
+
+		Component c;
+		JPanel panel;
+		String dateString;
+
+		// Create and set up the window.
+		DossierGuiFrame.createNamedFrame("Edit Event");
+		frame = DossierGuiFrame.getFrame();
+
+		// Add content to the window.
+		ArrayList<String> data = EventCreation.getEventData(eID);
+		EventEntryGui eventToEdit = new EventEntryGui(eID);
+		for (int i = 0; i < eventToEdit.getComponentCount() - 1; i++) {
+			c = eventToEdit.getComponent(i);
+			panel = (JPanel) c;
+			c = (Component) panel.getComponent(1);
+			if (c instanceof JTextField) {
+				((JTextField) c).setText(data.get(i + 1));
+			}
+			;
+			if (c instanceof JDatePickerImpl) {
+				dateString = data.get(i + 1);
+				UtilDateModel model = new UtilDateModel();
+				DateLabelFormatter df = new DateLabelFormatter();
+				Date d;
+				try {
+					d = (Date) df.stringToValue(dateString);
+					model.setValue(d);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				model.setSelected(true);
+				Properties p = new Properties();
+				p.put("text.today", "Today");
+				p.put("text.month", "Month");
+				p.put("text.year", "Year");
+				JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+				JDatePickerImpl newDatePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+				panel.remove(1);
+				panel.add(newDatePicker);
+			}
+		}
+		frame.add(eventToEdit);
+
+		// Display the window.
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+	private void saveEventInfo(int eID) {
 		JPanel panel;
 		JLabel label;
 		JTextField text;
-		String value ="";
+		String value = "";
 		Component c;
 		JDatePickerImpl datePicker;
-		int eID;
-
-		eID = EventCreation.createNewEvent();
+		if (eID < 1) {
+			eID = EventCreation.createNewEvent();
+		}
+		Attendee.setEventID(eID);
 		for (int i = 0; i < this.getComponentCount() - 1; i++) {
 			panel = (JPanel) this.getComponent(i);
 			label = (JLabel) panel.getComponent(0);
-			System.out.print(label.getText());
 			c = panel.getComponent(1);
 			if (c instanceof JTextField) {
 				text = (JTextField) c;
-				System.out.print(", " + text.getText());
 				value = text.getText();
 			} else if (c instanceof JDatePickerImpl) {
 				datePicker = (JDatePickerImpl) c;
-				System.out.println(datePicker.getJFormattedTextField().getText());
 				value = datePicker.getJFormattedTextField().getText();
 			}
 			if (value.length() > 1) {
@@ -130,20 +199,16 @@ public class EventEntryGui extends JPanel implements Runnable {
 	 * Create the GUI and show it. For thread safety, this method should be
 	 * invoked from the event dispatch thread.
 	 */
-	private static void createAndShowGUI() {
+	public static void createNewEventGUI() {
 		// Create and set up the window.
 		DossierGuiFrame.createNamedFrame("New Event");
 		frame = DossierGuiFrame.getFrame();
 
-		// Add content to the window.
-		frame.add(new EventEntryGui());
+		// Add empty content to the window.
+		frame.add(new EventEntryGui(-1));
 
 		// Display the window.
 		frame.pack();
 		frame.setVisible(true);
-	}
-
-	public static void main(String[] args) {
-		createAndShowGUI();
 	}
 }
